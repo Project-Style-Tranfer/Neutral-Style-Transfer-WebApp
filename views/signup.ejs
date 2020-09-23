@@ -3,11 +3,15 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
     <!-- Bootstrap CSS -->
     <link rel="stylesheet" href="/stylesheets/bootstrap.min.css">
-    <title>Neural Style Transfer Web App</title>
+    <!-- <link rel="stylesheet" href="/stylesheets/signin.css"> -->
+
+    <title>Sign-in</title>
 </head>
 <body>
+
     <nav class="navbar navbar-dark bg-dark navbar-expand-sm fixed-top">
         <div class="container">
             <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#Navbar">
@@ -16,7 +20,7 @@
             <div class="collapse navbar-collapse" id="Navbar">
                 <ul class="navbar-nav mr-auto">
                     <li class="nav-item active">
-                        <a href="#" class="nav-link">
+                        <a href="/" class="nav-link">
                             <span class="fa fa-home fa-md"></span> Home
                         </a>
                     </li>
@@ -51,6 +55,33 @@
             </div>
         </div>
     </nav>
+
+    <div class="container">
+        <div class="row" style="margin-top: 10%;">
+            <div class="col-md-3"></div>
+            <div class="col-md-6">
+                <form action="/signup" method="POST">
+                    <div class="row form-group">
+                        <label class="col-form-label col-4 text-right" for="username">Username</label>
+                        <input class=" col-8" type="text" name="username" id="username" placeholder="username" required>
+                    </div>
+                    <div class="row form-group">
+                        <label class="col-form-label col-4 text-right" for="email">Email</label>
+                        <input class=" col-8" type="email" name="email" id="email" placeholder="email" required>
+                    </div>
+                    <div class="row form-group">
+                        <label class="col-form-label col-4 text-right" for="password">Password</label>
+                        <input class=" col-8" type="password" name="password" id="password" placeholder="******" required>
+                    </div>
+                    <div class="row form-group">
+                        <div class="col-4"></div>
+                        <input class="col-8 btn btn-dark" type="submit" value="signup" name="signup">
+                    </div>
+                </form>
+            </div>
+            <div class="col-md-3"></div>
+        </div>
+    </div>
 
     <!-- jQuery first, then Popper.js, then Bootstrap JS. -->
     <!-- <script src="node_modules/jquery/dist/jquery.slim.min.js"></script> -->

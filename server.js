@@ -26,6 +26,17 @@ app.get('/', function(req, res){
     res.sendFile(path.join(__dirname+'/index.html'));
 });
 
+// ================
+// Sign up route
+// ================
+app.get('/signup', function(req, res){
+    res.render('signup');
+});
+
+app.post('/signup', function(req, res){
+    console.log(req.body);
+});
+
 // =============
 // Login Route
 // =============
