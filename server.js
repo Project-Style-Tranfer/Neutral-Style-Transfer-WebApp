@@ -48,6 +48,17 @@ app.post('/login', function(req, res){
     console.log(req.body);
 });
 
+// =============
+// Forgot Password Route
+// =============
+app.get('/forgot_password', function(req, res){
+    res.render('forgot_password');
+});
+
+app.post('/forgot_password', function(req, res){
+    console.log(req.body);
+});
+
 // ====================================
 // PORT listener, server is running :)
 // ====================================
