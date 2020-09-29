@@ -10,6 +10,7 @@
     "express": "^4.17.1",
     "googleapis": "^59.0.0",
     "jquery": "^1.12.4",
+    "mongodb": "^3.6.2",
     "path": "^0.12.7"
   },
   "devDependencies": {},
