@@ -6,18 +6,64 @@ global.app = express();
 global.path = require('path');
 global.google = require('googleapis');
 global.bodyParser = require('body-parser');
+global.mongoose = require('mongoose');
+global.nodemailer = require('nodemailer');
+global.bcrypt = require('bcryptjs');
+global.passport = require("passport");
+gloabl.LocalStrategy  = require("passport-local");
 
 // =======================
 // Environment Variables
 // =======================
-var PORT = 3000;
+var PORT = 3000,
+    URL  = "mongodb+srv://sulbha:sulbhaPassword@database.p2wjh.mongodb.net/Database?retryWrites=true&w=majority";
 
 // ===========================
 // Setting up the view engine
 // ===========================
 app.set("view engine","ejs");
+
+// ======================
+// All the static files
+// ======================
 app.use(express.static(__dirname + '/public'));
+
+// =============================
+// Body Parser for JSON format
+// =============================
 app.use(bodyParser.urlencoded({extended: true}));
+
+// ====================
+// Importing Models
+// ====================
+global.User = require("./models/users");
+
+// ==============================
+// Connection setup to database
+// ==============================
+mongoose.connect(URL, { useNewUrlParser: true, useUnifiedTopology: true }).then(()=>{
+    console.log("mongodb is connected");
+}).catch((error)=>{
+    console.log("mongodb not connected");
+    console.log(error);
+});
+
+// =================================
+// Set admin variables for mailing
+// =================================
+global.adminMailid = "";
+global.adminPass = "";
+
+// =============
+// Nodemailer
+// =============
+global.transporter = nodemailer.createTransport({
+    service: 'gmail',
+    auth: {
+        user: adminMailid,
+        pass: adminPass
+    }
+});
 
 // ===========
 // Home Route
@@ -34,7 +80,18 @@ app.get('/signup', function(req, res){
 });
 
 app.post('/signup', function(req, res){
-    console.log(req.body);
+    var newUSer = new User({username: req.body.username, email: req.body.email});
+    User.register(newUSer, req.body.password, function(err, user){
+        if(err) {
+            console.log(err);
+            req.flash("error", err.message);
+            res.redirect("back");
+        }
+        passport.authenticate("local")(req, res, function(){
+            req.flash("success", "Welcome to the artistic world " + user.username);
+            res.redirect("/");
+        });
+    });
 });
 
 // =============
@@ -53,4 +110,4 @@ app.post('/login', function(req, res){
 // ====================================
 app.listen(PORT, function(){
     console.log("The server is running...");
-})
+});

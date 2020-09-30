@@ -4,12 +4,17 @@
   "description": "",
   "main": "server.js",
   "dependencies": {
+    "bcryptjs": "^2.4.3",
     "body-parser": "^1.19.0",
     "bootstrap": "^4.5.2",
     "ejs": "^3.1.5",
     "express": "^4.17.1",
     "googleapis": "^59.0.0",
     "jquery": "^1.12.4",
+    "mongoose": "^5.10.6",
+    "nodemailer": "^6.4.11",
+    "passport": "^0.4.1",
+    "passport-local": "^1.0.0",
     "path": "^0.12.7"
   },
   "devDependencies": {},
