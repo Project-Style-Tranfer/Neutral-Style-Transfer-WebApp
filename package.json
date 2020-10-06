@@ -13,7 +13,6 @@
     "express-session": "^1.17.1",
     "googleapis": "^59.0.0",
     "jquery": "^1.12.4",
-    "mongodb": "^3.6.2",
     "mongoose": "^5.10.6",
     "nodemailer": "^6.4.11",
     "passport": "^0.4.1",
