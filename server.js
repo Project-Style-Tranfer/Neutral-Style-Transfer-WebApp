@@ -10,7 +10,9 @@ global.mongoose = require('mongoose');
 global.nodemailer = require('nodemailer');
 global.bcrypt = require('bcryptjs');
 global.passport = require("passport");
-gloabl.LocalStrategy  = require("passport-local");
+global.LocalStrategy  = require("passport-local").Strategy;
+global.googleStrategy = require('passport-google-oauth2').Strategy;
+global.flash = require('connect-flash');
 
 // =======================
 // Environment Variables
@@ -36,7 +38,7 @@ app.use(bodyParser.urlencoded({extended: true}));
 // ====================
 // Importing Models
 // ====================
-global.User = require("./models/users");
+var User = require("./models/users");
 
 // ==============================
 // Connection setup to database
@@ -64,6 +66,36 @@ global.transporter = nodemailer.createTransport({
         pass: adminPass
     }
 });
+
+// ===========================
+// For prompting the messages 
+// ===========================
+app.use(flash());
+
+// ===========================
+// PASSPORT CONFIGURATION
+// ===========================
+app.use(require("express-session")({
+    secret: "Blah",
+    resave: false,
+    saveUninitialized: false
+}));
+app.use(passport.initialize());
+app.use(passport.session());
+passport.use(new LocalStrategy(User.authenticate()));
+passport.serializeUser(User.serializeUser());
+passport.deserializeUser(User.deserializeUser());
+
+// =============================
+// Setting up the user globally
+// =============================
+app.use(function(req, res, next){
+    res.locals.currentUser = req.user;
+    res.locals.error = req.flash("error");
+    res.locals.success = req.flash("success");
+    next();
+});
+
 
 // ===========
 // Home Route

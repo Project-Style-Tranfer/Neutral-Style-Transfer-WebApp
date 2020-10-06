@@ -7,18 +7,19 @@
     "bcryptjs": "^2.4.3",
     "body-parser": "^1.19.0",
     "bootstrap": "^4.5.2",
+    "connect-flash": "^0.1.1",
     "ejs": "^3.1.5",
     "express": "^4.17.1",
+    "express-session": "^1.17.1",
     "googleapis": "^59.0.0",
     "jquery": "^1.12.4",
-<<<<<<< HEAD
+    "mongodb": "^3.6.2",
     "mongoose": "^5.10.6",
     "nodemailer": "^6.4.11",
     "passport": "^0.4.1",
+    "passport-google-oauth2": "^0.2.0",
     "passport-local": "^1.0.0",
-=======
-    "mongodb": "^3.6.2",
->>>>>>> c43f90db975d304b15ac2fd48ff42d3dfe40a6bf
+    "passport-local-mongoose": "^6.0.1",
     "path": "^0.12.7"
   },
   "devDependencies": {},
