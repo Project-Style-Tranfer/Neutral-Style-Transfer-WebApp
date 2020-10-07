@@ -2,6 +2,7 @@
 // Classic Node Packages & APIS
 // ===============================
 global.express = require("express");
+global.expressLayouts = require("express-ejs-layouts");
 global.app = express();
 global.path = require('path');
 global.google = require('googleapis');
@@ -23,6 +24,7 @@ var PORT = 3000,
 // ===========================
 // Setting up the view engine
 // ===========================
+app.use(expressLayouts);
 app.set("view engine","ejs");
 
 // ======================
