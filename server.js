@@ -127,13 +127,13 @@ app.post('/signup', function(req, res){
 });
 
 // =============
-// Login Route
+// Signin Route
 // =============
-app.get('/login', function(req, res){
+app.get('/signin', function(req, res){
     res.render('signin');
 });
 
-app.post('/login', function(req, res){
+app.post('/signin', function(req, res){
     console.log(req.body);
 });
 
