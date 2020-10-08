@@ -140,6 +140,15 @@ app.post('/signin', function(req, res){
     console.log(req.body);
 });
 
+// ==============
+// Logout Route
+// ==============
+app.get('/logout', function(req, res){
+    req.logout();
+    req.flash("success", "Logged you out!");
+    res.redirect("/");
+});
+
 // =============
 // Forgot Password Route
 // =============
