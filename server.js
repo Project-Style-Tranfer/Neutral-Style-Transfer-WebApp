@@ -14,6 +14,7 @@ global.passport = require("passport");
 global.LocalStrategy  = require("passport-local").Strategy;
 global.googleStrategy = require('passport-google-oauth2').Strategy;
 global.flash = require('connect-flash');
+global.otpGenerator = require('otp-generator')
 
 // =======================
 // Environment Variables
@@ -115,17 +116,31 @@ app.get('/signup', function(req, res){
 });
 
 app.post('/signup', function(req, res){
-    var newUSer = new User({username: req.body.username, email: req.body.email});
-    User.register(newUSer, req.body.password, function(err, user){
-        if(err) {
-            console.log(err);
-            req.flash("error", err.message);
-            res.redirect("back");
+    var newUser = new User({username: req.body.username, email: req.body.email, firstLogin: "True"});
+    var otp = otpGenerator.generate(6, { upperCase: false, specialChars: false });
+    var mailOptions = {
+        from: adminMailid,
+        to: req.body.email,
+        subject: "Verification OTP",
+        text: 'Use this OTP: ' + otp + ' to setup your account.'
+    };
+    transporter.sendMail(mailOptions, (error, info) => {
+        if (error) {
+            console.log(error);
+            req.flash("error", "Some error occurred, please try again!");
+            res.redirect('/signup');
+        } else {
+            User.register(newUser, req.body.password, function(err, user){
+                if(err) {
+                    console.log(err);
+                    req.flash("error", err.message);
+                    res.redirect("back");
+                } else {
+                    res.redirect("/signin");
+                }
+            });
         }
-        passport.authenticate("local")(req, res, function(){
-            req.flash("success", "Welcome to the artistic world " + user.username);
-            res.redirect("/");
-        });
+        // console.log('Message sent: %s', info.messageId);
     });
 });
 
