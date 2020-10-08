@@ -15,7 +15,11 @@
    - `$> cd Neural-Style-Transfer-Based-Web-App/`
 3. Install Dependencies
    - `$> npm install`
-4. Start server
+4. Mailing Functionality
+   - `set global.adminMailid = "youremail@xyz.com";`
+   - `global.adminPass = "yourPassword";`
+   - `Allow third party and less secure apps in your gmail account`
+5. Start server
    - `$> node server.js`
 
 Go to http://localhost:3000/
