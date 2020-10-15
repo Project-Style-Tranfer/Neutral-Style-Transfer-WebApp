@@ -10,7 +10,7 @@
 ### Run Software
 
 1. Clone Repo
-   - `$> git clone gh repo clone sulbhagarg/Neural-Style-Transfer-Based-Web-App`
+   - `$> git clone gh repo clone Project-Style-Tranfer/Neutral-Style-Transfer-WebApp`
 2. Change Directory
    - `$> cd Neural-Style-Transfer-Based-Web-App/`
 3. Install Dependencies
