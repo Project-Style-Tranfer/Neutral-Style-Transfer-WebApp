@@ -64,8 +64,8 @@ mongoose.connect(URL, { useNewUrlParser: true, useUnifiedTopology: true }).then(
 // =================================
 // Set admin variables for mailing
 // =================================
-global.adminMailid = "sulbhagarg99@gmail.com";
-global.adminPass = "123@Agarwal";
+global.adminMailid = "";
+global.adminPass = "";
 
 // =============
 // Nodemailer
