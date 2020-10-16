@@ -20,8 +20,8 @@ global.otpGenerator = require('otp-generator');
 // =======================
 // Environment Variables
 // =======================
-var PORT = 3000,
-    URL  = "mongodb+srv://sulbha:sulbhaPassword@database.p2wjh.mongodb.net/Database?retryWrites=true&w=majority";
+var PORT = process.env.PORT,
+    URL  = process.env.DATABASEURL;
 
 // ===========================
 // Setting up the view engine
@@ -64,8 +64,8 @@ mongoose.connect(URL, { useNewUrlParser: true, useUnifiedTopology: true }).then(
 // =================================
 // Set admin variables for mailing
 // =================================
-global.adminMailid = "";
-global.adminPass = "";
+global.adminMailid = process.env.ADMINMAIL;
+global.adminPass = process.env.ADMINPASS;
 
 // =============
 // Nodemailer
