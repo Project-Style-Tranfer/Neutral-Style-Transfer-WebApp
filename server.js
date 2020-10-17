@@ -16,10 +16,12 @@ global.LocalStrategy  = require("passport-local").Strategy;
 global.googleStrategy = require('passport-google-oauth2').Strategy;
 global.flash = require('connect-flash');
 global.otpGenerator = require('otp-generator');
+global.dotenv = require('dotenv');
 
 // =======================
 // Environment Variables
 // =======================
+dotenv.config();
 var PORT = process.env.PORT,
     URL  = process.env.DATABASEURL;
 
