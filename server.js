@@ -11,9 +11,6 @@ global.bodyParser = require('body-parser');
 global.mongoose = require('mongoose');
 global.nodemailer = require('nodemailer');
 global.bcrypt = require('bcrypt');
-global.passport = require("passport");
-global.LocalStrategy  = require("passport-local").Strategy;
-global.googleStrategy = require('passport-google-oauth2').Strategy;
 global.flash = require('connect-flash');
 global.otpGenerator = require('otp-generator');
 global.dotenv = require('dotenv');
@@ -84,20 +81,6 @@ global.transporter = nodemailer.createTransport({
 // For prompting the messages 
 // ===========================
 app.use(flash());
-
-// ===========================
-// PASSPORT CONFIGURATION
-// ===========================
-app.use(require("express-session")({
-    secret: "Blah",
-    resave: false,
-    saveUninitialized: false
-}));
-app.use(passport.initialize());
-app.use(passport.session());
-passport.use(new LocalStrategy(User.authenticate()));
-passport.serializeUser(User.serializeUser());
-passport.deserializeUser(User.deserializeUser());
 
 // ===========
 // Home Route
