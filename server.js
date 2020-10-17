@@ -124,46 +124,60 @@ app.get('/signup', function(req, res){
 });
 
 app.post('/signup', function(req, res){
-    var otp = otpGenerator.generate(6, { upperCase: false, specialChars: false });
-    var mailOptions = {
-        from: adminMailid,
-        to: req.body.email,
-        subject: "Verification OTP",
-        text: 'Use this OTP: ' + otp + ' to setup your account.'
-    };
-    transporter.sendMail(mailOptions, (error, info) => {
-        if (error) {
-            console.log(error);
-            req.flash("error", "Some error occurred, please try again!");
-            res.redirect('/signup');
-        } else {
-            Otp.create({email: req.body.email, otp: otp}, function(err, newOtp){
-                if(err){
-                    req.flash("error", err.message);
-                    res.redirect("back", {
-                        loggedin: false
-                    });
+    if(req.session.userid!=null) {
+        req.flash("error", "Invalid input!");
+        res.redirect("/");
+    } else {
+        var usersProjection = { 
+            __v: false,
+            _id: false,
+            password:false
+        };
+        User.find(
+            { $or: [ {email: req.body.email}, {username: req.body.username} ] }, usersProjection, function(err, foundUser){
+            if(err) {
+                console.log(err);
+            } else {
+                if(foundUser.length>0) {
+                    req.flash("error", "User email already registered!");
+                    res.redirect("/signup");
                 } else {
-                    bcrypt.genSalt(10, function(err, salt){
-                        if(err) {
-                            console.log(err);
+                    var otp = otpGenerator.generate(6, { upperCase: false, specialChars: false });
+                    var mailOptions = {
+                        from: adminMailid,
+                        to: req.body.email,
+                        subject: "Verification OTP",
+                        text: 'Use this OTP: ' + otp + ' to setup your account.'
+                    };
+                    transporter.sendMail(mailOptions, (error, info) => {
+                        if (error) {
+                            console.log(error);
+                            req.flash("error", "Some error occurred, please try again!");
+                            res.redirect('/signup');
                         } else {
-                            bcrypt.hash(req.body.password, salt, function(err, hash) {
-                                if(err) {
-                                    console.log(err);
+                            Otp.create({email: req.body.email, otp: otp}, function(err, newOtp){
+                                if(err){
+                                    req.flash("error", err.message);
+                                    res.redirect("back");
                                 } else {
-                                    var newUser = new User({username: req.body.username, email: req.body.email, password: hash, firstLogin: "True"});
-                                    User.create(newUser, function(err, user){
+                                    bcrypt.genSalt(10, function(err, salt){
                                         if(err) {
                                             console.log(err);
-                                            req.flash("error", err.message);
-                                            res.redirect("/signup", {
-                                                loggedin: false
-                                            });
                                         } else {
-                                            console.log(req.body.password);
-                                            res.redirect("/signin", {
-                                                loggedin: false
+                                            bcrypt.hash(req.body.password, salt, function(err, hash) {
+                                                if(err) {
+                                                    console.log(err);
+                                                } else {
+                                                    var newUser = new User({username: req.body.username, email: req.body.email, password: hash, firstLogin: "True"});
+                                                    User.create(newUser, function(err, user){
+                                                        if(err) {
+                                                            req.flash("error", err.message);
+                                                            res.redirect("/signup");
+                                                        } else {
+                                                            res.redirect("/signin");
+                                                        }
+                                                    });
+                                                }
                                             });
                                         }
                                     });
@@ -172,9 +186,9 @@ app.post('/signup', function(req, res){
                         }
                     });
                 }
-            });
-        }
-    });
+            }
+        })
+    }
 });
 
 // =============
@@ -191,7 +205,6 @@ app.get('/signin', function(req, res){
 });
 
 app.post('/signin', function(req, res){
-    // console.log(req.body);
     var email = req.body.email;
     var password = req.body.password;
     User.findOne({email: email}, function(err, foundUser){
@@ -210,13 +223,22 @@ app.post('/signin', function(req, res){
                         } else {
                             if(foundOtp) {
                                 if(foundOtp.otp == password) {
-                                    User.updateOne({email: email}, {firstLogin: "False"}, function(err, updated){
+                                    Otp.deleteOne({email: email}, function(err, deletedOtp){
                                         if(err) {
                                             req.flash("error", "Some error Occurred!");
-                                            res.redirect('/signin');
+                                            res.redirect('/signin');         
                                         } else {
-                                            req.flash("success", "Successfully logged you in!");
-                                            res.redirect("/");
+                                            User.updateOne({email: email}, {firstLogin: "False"}, function(err, updated){
+                                                if(err) {
+                                                    req.flash("error", "Some error Occurred!");
+                                                    res.redirect('/signin');
+                                                } else {
+                                                    req.session.loggedin = true;
+                                                    req.session.userid = email;
+                                                    req.flash("success", "Successfully logged you in!");
+                                                    res.redirect("/");
+                                                }
+                                            });
                                         }
                                     })
                                 } else {
