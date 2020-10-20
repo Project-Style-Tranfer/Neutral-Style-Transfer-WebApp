@@ -24,7 +24,15 @@
    - `$env:DATABASEURL = "your_databse_url_generated_from_mongo_cloud"`
    - `$env:ADMINMAIL = "youremail"`
    - `$env:ADMINPASS = "yourpassword"`
-6. Start server
+   OR
+   Environement Variables - .env setup - Create .env file in root directory and write:
+   - `PORT = "3000"`
+   - `DATABASEURL = "your_databse_url_generated_from_mongo_cloud"`
+   - `ADMINMAIL = "youremail"`
+   - `ADMINPASS = "yourpassword"`
+6. Image setup
+   - Create `uploads` folder in root directory.
+7. Start server
    - `$> node server.js`
 
 Go to http://localhost:3000/
