@@ -12,5 +12,12 @@
     </div>
     <%- include("partials/flash");%>
 
+    <!-- Take content image as input -->
+    <h5>Upload your image on which you want to apply style</h5>
+    <form method="POST" action="/content_image" enctype="multipart/form-data">
+        <input type="file" name="content_image" id="content_image" accept="image/*" value="" required>
+        <input type="submit">
+    </form>
+
 </body>
 </html>
