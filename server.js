@@ -103,7 +103,8 @@ app.get('/', function(req, res){
         };
         User.find({username: req.session.userid}, usersProjection, function(err, foundUser){
             if(err) {
-                console.log(err);
+                req.flash("error", "Some error occurred!!");
+                res.redirect("back");
             } else {
                 res.render('index', {
                     loggedin: true,
@@ -144,7 +145,8 @@ app.post('/signup', function(req, res){
         User.find(
             { $or: [ {email: req.body.email}, {username: req.body.username} ] }, usersProjection, function(err, foundUser){
             if(err) {
-                console.log(err);
+                req.flash("error", "Some error occurred!!");
+                res.redirect("back");
             } else {
                 if(foundUser.length>0) {
                     req.flash("error", "User email already registered!");
@@ -159,22 +161,23 @@ app.post('/signup', function(req, res){
                     };
                     transporter.sendMail(mailOptions, (error, info) => {
                         if (error) {
-                            console.log(error);
                             req.flash("error", "Some error occurred, please try again!");
                             res.redirect('/signup');
                         } else {
                             Otp.create({email: req.body.email, otp: otp}, function(err, newOtp){
                                 if(err){
                                     req.flash("error", err.message);
-                                    res.redirect("back");
+                                    res.redirect('/signup');
                                 } else {
                                     bcrypt.genSalt(10, function(err, salt){
                                         if(err) {
-                                            console.log(err);
+                                            req.flash("error", err.message);
+                                            res.redirect('/signup');
                                         } else {
                                             bcrypt.hash(req.body.password, salt, function(err, hash) {
                                                 if(err) {
-                                                    console.log(err);
+                                                    req.flash("error", err.message);
+                                                    res.redirect('/signup');
                                                 } else {
                                                     var newUser = new User({username: req.body.username, email: req.body.email, password: hash, firstLogin: "True"});
                                                     User.create(newUser, function(err, user){
@@ -262,7 +265,6 @@ app.post('/signin', function(req, res){
                 } else {
                     bcrypt.compare(password, foundUser.password, function(err, isSame){
                         if(err) {
-                            console.log(err);
                             req.flash("error", "Some error Occurred!");
                             res.redirect('/signin');
                         } else {
@@ -311,13 +313,13 @@ app.post('/forgot_password', function(req, res){
 // =======================
 app.post('/content_image', function(req, res){
     if(req.session.userid!=null) {
-        console.log(req.files.content_image);
         var file = req.files.content_image;
         var filename = file.name;
         var name = "ContentImage_" + req.session.userid + "_" + Date.now() + "_" + filename; 
         file.mv("./uploads/"+name, function(err){
             if(err){
-                console.log(err);
+                req.flash("error", "Some error occured: " + err.message);
+                res.redirect("back");
             } else {
                 var newContentImage = {
                     name: "ContentImage_" + req.session.userid + "_" + Date.now(),
@@ -327,13 +329,11 @@ app.post('/content_image', function(req, res){
                     },
                     author: req.session.userid
                 };
-                console.log(newContentImage);
                 ContentImage.create(newContentImage, (err, newContentImageCreated) => {
                     if(err) {
                         req.flash("error", "Some error occured");
                         res.redirect("back");
                     } else {
-                        console.log(newContentImageCreated);
                         res.redirect("/");
                     }
                 });
