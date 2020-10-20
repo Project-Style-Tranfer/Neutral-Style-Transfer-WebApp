@@ -19,12 +19,12 @@
    - `$> npm install`
 4. Mailing Functionality
    - `Allow third party and less secure apps in your gmail account`
-5. Environement Variables - cmd line setup
+5. (a) Environement Variables - cmd line setup
    - `$env:PORT = "3000"`
    - `$env:DATABASEURL = "your_databse_url_generated_from_mongo_cloud"`
    - `$env:ADMINMAIL = "youremail"`
-   - `$env:ADMINPASS = "yourpassword"`
-   OR
+   - `$env:ADMINPASS = "yourpassword"` <br />
+   OR <br />
    Environement Variables - .env setup - Create .env file in root directory and write:
    - `PORT = "3000"`
    - `DATABASEURL = "your_databse_url_generated_from_mongo_cloud"`
