@@ -14,6 +14,9 @@ global.bcrypt = require('bcrypt');
 global.flash = require('connect-flash');
 global.otpGenerator = require('otp-generator');
 global.dotenv = require('dotenv');
+global.fs = require('fs');
+global.path = require('path');
+global.fileUpload = require('express-fileupload');
 
 // =======================
 // Environment Variables
@@ -48,7 +51,7 @@ app.use(session({secret: 'nirma@123',resave: true,saveUninitialized: true}));
 // ====================
 var User = require("./models/users");
 var Otp = require("./models/otp");
-const passport = require("passport");
+var ContentImage = require("./models/contentimages");
 
 // ==============================
 // Connection setup to database
@@ -81,6 +84,11 @@ global.transporter = nodemailer.createTransport({
 // For prompting the messages 
 // ===========================
 app.use(flash());
+
+// ============
+// Fileupload
+// ============
+app.use(fileUpload());
 
 // ===========
 // Home Route
@@ -297,6 +305,46 @@ app.get('/forgot_password', function(req, res){
 app.post('/forgot_password', function(req, res){
     console.log(req.body);
 });
+
+// =======================
+// take images for style
+// =======================
+app.post('/content_image', function(req, res){
+    if(req.session.userid!=null) {
+        console.log(req.files.content_image);
+        var file = req.files.content_image;
+        var filename = file.name;
+        var name = "ContentImage_" + req.session.userid + "_" + Date.now() + "_" + filename; 
+        file.mv("./uploads/"+name, function(err){
+            if(err){
+                console.log(err);
+            } else {
+                var newContentImage = {
+                    name: "ContentImage_" + req.session.userid + "_" + Date.now(),
+                    img: {
+                        data: fs.readFileSync(path.join(__dirname + '/uploads/' + name)), 
+                        contentType: 'image/*'
+                    },
+                    author: req.session.userid
+                };
+                console.log(newContentImage);
+                ContentImage.create(newContentImage, (err, newContentImageCreated) => {
+                    if(err) {
+                        req.flash("error", "Some error occured");
+                        res.redirect("back");
+                    } else {
+                        console.log(newContentImageCreated);
+                        res.redirect("/");
+                    }
+                });
+            }
+        });
+    } else {
+        res.render('signin', {
+            loggedin: false
+        });
+    }
+})
 
 // ====================================
 // PORT listener, server is running :)
