@@ -1,23 +1,81 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
     <title>Neural Style Transfer Web App</title>
+    <link rel="stylesheet" href="/stylesheets/index.css">
 </head>
-<body>
-    <div class="jumbotron jumbotron-fluid">
-        <div class="container">
-            <h1 class="display-4">TURN YOUR PHOTOS INTO ART.</h1>
-            <p class="lead">Not an Artist? Need an artisitc edit to your photo? Repaint your picture in the style of your favorite artist</p>
-          </div>
+
+<body class="bg-light">
+
+    <!-- Carousel slider -->
+    <div id="carouselExampleCaptions" class="carousel slide carousel-fade" data-ride="carousel">
+        <ol class="carousel-indicators">
+            <li data-target="#carouselExampleCaptions" data-slide-to="0" class="active"></li>
+            <li data-target="#carouselExampleCaptions" data-slide-to="1"></li>
+            <li data-target="#carouselExampleCaptions" data-slide-to="2"></li>
+        </ol>
+        <div class="carousel-inner">
+            <div class="carousel-item active">
+                <img src="/images/mysignin.jfif" class="d-block w-100" alt="image1">
+                <div class="carousel-caption d-none d-md-block">
+                    <!-- <h5>Starry Night</h5>
+                    <p>Nulla vitae elit libero, a pharetra augue mollis interdum.</p> -->
+                </div>
+            </div>
+            <div class="carousel-item">
+                <img src="/images/indexCarousel_monaLisa.jfif" class="d-block w-100" alt="image2">
+                <div class="carousel-caption d-none d-md-block">
+                    <!-- <h5>Second slide label</h5>
+                    <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit.</p> -->
+                </div>
+            </div>
+            <div class="carousel-item">
+                <img src="/images/indexCarousel_jurassicPark.jfif" class="d-block w-100" alt="image3">
+                <div class="carousel-caption d-none d-md-block">
+                    <!-- <h5>Third slide label</h5>
+                    <p>Praesent commodo cursus magna, vel scelerisque nisl consectetur.</p> -->
+                </div>
+            </div>
+        </div>
+        <a class="carousel-control-prev" href="#carouselExampleCaptions" role="button" data-slide="prev">
+            <span class="carousel-control-prev-icon" aria-hidden="true"></span>
+            <span class="sr-only">Previous</span>
+        </a>
+        <a class="carousel-control-next" href="#carouselExampleCaptions" role="button" data-slide="next">
+            <span class="carousel-control-next-icon" aria-hidden="true"></span>
+            <span class="sr-only">Next</span>
+        </a>
     </div>
-    <%- include("partials/flash");%>
+
+    <!-- Jumbotronn for title -->
+    <div class="jumbotron text-center bg-light p-0" style="margin-top: 2rem;">
+        <div class="container">
+            <h1 class="display-4 text-dark">TURN YOUR PHOTOS INTO ART.</h1>
+            <p class="lead text-dark">Not an Artist? Need an artisitc edit to your photo? Repaint your picture in the style of
+                your favorite artist</p>
+        </div>
+    </div>
 
     <!-- Take content image as input -->
-    <h5>Upload your image on which you want to apply style</h5>
-    <form method="POST" action="/content_image" enctype="multipart/form-data">
-        <input type="file" name="content_image" id="content_image" accept="image/*" value="" required>
-        <input type="submit">
-    </form>
+    <%- include("partials/flash");%>
+        <!-- File picker  -->
+    <div class="container text-center">
+        <form method="POST" action="/content_image" enctype="multipart/form-data">
+            <input type="file" name="content_image" accept="image/*" id="content_image" value="" required />
+            <label class="btn btn-primary btn-lg" for="content_image">Upload Your Favourite Photo To Style It</label>
+        </form>
+    </div>
+
+    <script>
+        // set interval for carousel
+        $('.carousel').carousel({
+            interval: 100,
+            keyboard: true,
+            ride : true
+        })
+    </script>
 
 </body>
+
 </html>
