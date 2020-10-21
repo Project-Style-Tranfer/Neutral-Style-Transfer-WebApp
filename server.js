@@ -157,7 +157,7 @@ app.post('/signup', function(req, res){
                         from: adminMailid,
                         to: req.body.email,
                         subject: "Verification OTP",
-                        text: 'Use this OTP: ' + otp + ' to setup your account.'
+                        text: 'Use this OTP: ' + otp + ' to setup your account. Use it as password for first time login.'
                     };
                     transporter.sendMail(mailOptions, (error, info) => {
                         if (error) {
