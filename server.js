@@ -301,11 +301,81 @@ app.get('/logout', function(req, res){
 // Forgot Password Route
 // =============
 app.get('/forgot_password', function(req, res){
-    res.render('forgot_password');
+    if(req.session.userid==null){
+        res.render('forgot_password', {
+            loggedin: false
+        });
+    } else {
+        req.flash("error", "You have to be logged in to do that!");
+        res.render('forgot_password', {
+            loggedin: true
+        });
+    }
 });
 
-app.post('/forgot_password', function(req, res){
-    console.log(req.body);
+app.post('/forgot_password', (req, res) => {
+    if(req.session.userid==null){
+        var email  = req.body.email;
+        var usersProjection = { 
+            __v: false,
+            _id: false,
+            password:false
+        };
+        User.findOne({email: email}, usersProjection, (err, foundUser) => {
+            if(err) {
+                req.flash("error", "Some error occurred, please try again later!");
+                res.redirect("/forgot_password");
+            } else {
+                if(foundUser){
+                    var password = otpGenerator.generate(8, { upperCase: true, specialChars: true });
+                    var mailOptions = {
+                        from: adminMailid,
+                        to: email,
+                        subject: "Password change",
+                        text: 'Your new password is: ' + password + ' to login to your account.'
+                    };
+                    transporter.sendMail(mailOptions, (error, info) => {
+                        if (error) {
+                            req.flash("error", "Some error occurred, please try again!");
+                            res.redirect('/forgot_password');
+                        } else {
+                            bcrypt.genSalt(10, (err, salt) => {
+                                if(err) {
+                                    req.flash("error", err.message);
+                                    res.redirect('/forgot_password');
+                                } else {
+                                    bcrypt.hash(password, salt, (err, hash) => {
+                                        if(err) {
+                                            req.flash("error", err.message);
+                                            res.redirect('/forgot_password');
+                                        } else {
+                                            User.updateOne({email: email}, {password: hash}, (err, updateUser) => {
+                                                if(err) {
+                                                    req.flash("error", err.message);
+                                                    res.redirect('/forgot_password');
+                                                } else {
+                                                    req.flash("success", "Your password is resetted successfully! Please login with your new password.");
+                                                    res.redirect("/signin");
+                                                }
+                                            })
+                                        }
+                                    });
+                                }
+                            });
+                        }
+                    });
+                } else {
+                    req.flash("error", "Invalid email!");
+                    res.redirect("/signup");
+                }
+            }
+        })
+    } else {
+        req.flash("error", "You have to be logged out to do that!");
+        res.render('signin', {
+            loggedin: true
+        });
+    }
 });
 
 // =======================
