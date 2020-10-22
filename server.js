@@ -90,6 +90,15 @@ app.use(flash());
 // ============
 app.use(fileUpload());
 
+// ===================================
+// Setting up the flash vars globally
+// ===================================
+app.use(function(req, res, next){
+    res.locals.error = req.flash("error");
+    res.locals.success = req.flash("success");
+    next();
+});
+
 // ===========
 // Home Route
 // ===========
@@ -99,9 +108,10 @@ app.get('/', function(req, res){
         var usersProjection = { 
             __v: false,
             _id: false,
-            password:false
+            password: false,
+            firstLogin: false
         };
-        User.find({username: req.session.userid}, usersProjection, function(err, foundUser){
+        User.find({email: req.session.userid}, usersProjection, function(err, foundUser){
             if(err) {
                 req.flash("error", "Some error occurred!!");
                 res.redirect("back");
@@ -293,7 +303,8 @@ app.post('/signin', function(req, res){
 // ==============
 app.get('/logout', function(req, res){
     req.flash("success", "Logged you out!");
-    req.session.destroy();
+    req.session.loggedin = false;
+    req.session.userid = null;
     res.redirect("/");
 });
 
@@ -307,9 +318,7 @@ app.get('/forgot_password', function(req, res){
         });
     } else {
         req.flash("error", "You have to be logged in to do that!");
-        res.render('forgot_password', {
-            loggedin: true
-        });
+        res.redirect('/');
     }
 });
 
@@ -404,6 +413,7 @@ app.post('/content_image', function(req, res){
                         req.flash("error", "Some error occured");
                         res.redirect("back");
                     } else {
+                        req.flash("success", "Your photo stored successfully!!");
                         res.redirect("/");
                     }
                 });
