@@ -4,6 +4,9 @@
 <head>
     <title>Neural Style Transfer Web App</title>
     <link rel="stylesheet" href="/stylesheets/index.css">
+    <!-- <link rel="stylesheet" href="/stylesheets/style-transfer.css"> -->
+    <script src="https://cdn.jsdelivr.net/npm/@magenta/image@^0.2.1"></script>
+    <!-- <script src="https://cdn.jsdelivr.net/npm/@tensorflow/tfjs@2.0.0/dist/tf.min.js"></script> -->
 </head>
 
 <body class="bg-light">
@@ -52,29 +55,95 @@
     <div class="jumbotron text-center bg-light p-0" style="margin-top: 2rem;">
         <div class="container">
             <h1 class="display-4 text-dark">TURN YOUR PHOTOS INTO ART.</h1>
-            <p class="lead text-dark">Not an Artist? Need an artisitc edit to your photo? Repaint your picture in the style of
+            <p class="lead text-dark">Not an Artist? Need an artisitc edit to your photo? Repaint your picture in the
+                style of
                 your favorite artist</p>
         </div>
     </div>
 
     <!-- Take content image as input -->
     <%- include("partials/flash");%>
-        <!-- File picker  -->
-    <div class="container text-center">
-        <form method="POST" action="/content_image" enctype="multipart/form-data">
-            <input type="file" name="content_image" accept="image/*" id="content_image" value="" class="ml-5 mt-2" required />
-            <label class="btn btn-outline-primary btn-lg" for="content_image">Select Your Favourite Photo To Style It</label>
-            <button class="btn btn-sm btn-primary" type="submit">Upload</button>
-        </form>
-    </div>
+    <!-- File picker  -->
+
+    <% if(loggedin){ %>
+        <div class="container text-center">
+            <!-- <form id="mail-form" method="POST" action="/content_image" enctype="multipart/form-data"> -->
+
+                <div class="row">
+                    <div class="col-md-6 text-center" style="width: 400px; height: 400px; padding: 2%;">
+                        <img id="content_image_display" style="max-width: 100%; max-height: 100%;" src="/images/chicago.jpg" /><br><br>
+                    </div>
+
+                    <div class="col-md-6 text-center" style="width: 400px; height: 400px; padding: 2%;">
+                        <img id="style_image_display" style="max-width: 100%; max-height: 100%;" src="/images/seaport.jpg"/><br><br>
+                    </div>
+                </div>
+
+                <div class="row">
+                    <div class="col-md-6 text-center">
+                        <input type="file" onchange="loadFile(event, 'content_image_display')" name="content_image" accept="image/*"
+                        id="content_image" value="" class="ml-5 mt-2" required />
+                    <label class="btn btn-outline-primary btn-lg" for="content_image">Select Your Favourite Photo To Style It</label><br>
+                    </div>
+                    <div class="col-md-6 text-center">
+                        <input type="file" onchange="loadFile(event, 'style_image_display')" name="style_image" accept="image/*"
+                            id="style_image" value="" class="ml-5 mt-2" required />
+                        <label class="btn btn-outline-primary btn-lg" for="style_image">Select Your Favourite Style To Apply</label><br>
+                    </div>
+                </div>
+
+                <div class="row">
+                    <div class="col-md-12 text-center">
+                        <br>
+                        <a class="btn btn-md btn-primary transfer-btn">Transfer</a>
+                        <br>
+                        <br>
+                    </div>
+                </div>
+
+                <div class="row" id="canvas-main">
+                    <div class="col-md-12 text-center">
+                        <canvas id="stylized"></canvas><br>
+                    </div>
+                </div>
+
+                <div class="row">
+                    <div class="col-md-12 text-center">
+                        <br>
+                        <button class="btn btn-md btn-primary btn-download" type="submit">Download</button>
+                        <br>
+                        <br>
+                    </div>
+                </div>
+
+                <script>
+                    var loadFile = function (event, targetName) {
+                        var image = document.getElementById(targetName);
+                        image.src = URL.createObjectURL(event.target.files[0]);
+                    };
+                </script>
+
+                <hr>
+            <!-- </form> -->
+        </div>
+    <% } else { %>
+        <div class="container text-center">
+            <a class="btn btn-primary" href="/signin">Start Editing</a>
+        </div>
+    <% } %>
+    <script src="https://code.jquery.com/jquery-3.3.1.min.js"></script>
+
+    <script type="module" src="/scripts/model.js"></script>
+    <script src="/scripts/jquery.keyframe.min.js"></script>
+    <!-- <script src="./node_modules/jquery/dist/jquery.min.js"></script> -->
 
     <script>
         // set interval for carousel
-        $('.carousel').carousel({
-            interval: 100,
-            keyboard: true,
-            ride : true
-        })
+        // $('.carousel').carousel({
+        //     interval: 100,
+        //     keyboard: true,
+        //     ride : true
+        // })
     </script>
 
 </body>
