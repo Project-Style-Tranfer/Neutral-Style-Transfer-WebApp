@@ -51,7 +51,6 @@ app.use(session({secret: 'nirma@123',resave: true,saveUninitialized: true}));
 // ====================
 var User = require("./models/users");
 var Otp = require("./models/otp");
-var ContentImage = require("./models/contentimages");
 
 // ==============================
 // Connection setup to database
