@@ -170,7 +170,7 @@ app.post('/signup', function(req, res){
                     };
                     transporter.sendMail(mailOptions, (error, info) => {
                         if (error) {
-                            req.flash("error", "Some error occurred, please try again!");
+                            req.flash("error", "Please enter the correct email id");
                             res.redirect('/signup');
                         } else {
                             Otp.create({email: req.body.email, otp: otp}, function(err, newOtp){
