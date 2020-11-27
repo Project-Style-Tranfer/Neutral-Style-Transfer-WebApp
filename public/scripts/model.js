@@ -21,17 +21,13 @@ async function stylize() {
   model.stylize(contentImg, styleImg, 0.8).then((imageData) => {
       ctx.putImageData(imageData, 0, 0);
       console.log(imageData);
+      $('.hide').show();
   })
 }
 
-function downloadCanvas(link, canvasId, filename) {
-  link.href = document.getElementById(canvasId).toDataURL();
-  link.download = filename;
-}
-
 $(".btn-download").on('click', function() {
-  var img = canvas.toDataURL("image/png");
-  document.body.appendChild('<img src="'+img+'"/>');
-  // document.body.appendChild(img);
-  // downloadCanvas(this, 'stylized', 'test.jpg');
+  var link = document.createElement('a');
+  link.href = canvas.toDataURL("image/png");
+  link.download = 'artistic.png';
+  link.click();
 })

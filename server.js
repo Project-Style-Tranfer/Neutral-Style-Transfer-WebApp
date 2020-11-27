@@ -51,7 +51,6 @@ app.use(session({secret: 'nirma@123',resave: true,saveUninitialized: true}));
 // ====================
 var User = require("./models/users");
 var Otp = require("./models/otp");
-var ContentImage = require("./models/contentimages");
 
 // ==============================
 // Connection setup to database
@@ -386,77 +385,6 @@ app.post('/forgot_password', (req, res) => {
         });
     }
 });
-
-// =======================
-// take images for style
-// =======================
-app.post('/content_image', function(req, res){
-    if(req.session.userid!=null) {
-        console.log(req.body);
-        console.log(req.files);
-        // var file_content_image = req.files.content_image;
-        // var file_style_image = req.files.style_image;
-        // var filename_content = file_content_image.name;
-        // var filename_style = file_style_image.name;
-        // var name_content = "ContentImage_" + req.session.userid + "_" + Date.now() + "_" + filename_content; 
-        // var name_style = "StyleImage_" + req.session.userid + "_" + Date.now() + "_" + filename_style; 
-        // file_content_image.mv("./uploads/"+name_content, function(err){
-        //     if(err){
-        //         req.flash("error", "Some error occured: " + err.message);
-        //         res.redirect("back");
-        //     } else {
-        //         var newContentImage = {
-        //             name: "ContentImage_" + req.session.userid + "_" + Date.now(),
-        //             img: {
-        //                 data: fs.readFileSync(path.join(__dirname + '/uploads/' + name_content)), 
-        //                 contentType: 'image/*'
-        //             },
-        //             author: req.session.userid
-        //         };
-        //         ContentImage.create(newContentImage, (err, newContentImageCreated) => {
-        //             if(err) {
-        //                 req.flash("error", "Some error occured");
-        //                 res.redirect("back");
-        //             } else {
-        //                 file_style_image.mv("./uploads/"+name_style, function(err){
-        //                     if(err){
-        //                         req.flash("error", "Some error occured: " + err.message);
-        //                         res.redirect("back");
-        //                     } else {
-        //                         var newContentImage = {
-        //                             name: "StyleImage_" + req.session.userid + "_" + Date.now(),
-        //                             img: {
-        //                                 data: fs.readFileSync(path.join(__dirname + '/uploads/' + name_style)), 
-        //                                 contentType: 'image/*'
-        //                             },
-        //                             author: req.session.userid
-        //                         };
-        //                         ContentImage.create(newContentImage, (err, newContentImageCreated) => {
-        //                             if(err) {
-        //                                 req.flash("error", "Some error occured");
-        //                                 res.redirect("back");
-        //                             } else { 
-        //                                 req.flash("success", "Your photo stored successfully!!");
-        //                                 res.redirect("/");
-        //                             }
-        //                         });
-        //                     }
-        //                 });
-        //             }
-        //         });
-        //     }
-        // });
-    } else {
-        res.render('signin', {
-            loggedin: false
-        });
-    }
-})
-
-// TEMP
-// const tf = require('@tensorflow/tfjs');
-// mainmodel = require('./public/scripts/model.js');
-// app.get('/temp', mainmodel);
 
 // ====================================
 // PORT listener, server is running :)
