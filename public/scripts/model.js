@@ -27,7 +27,7 @@ async function stylize() {
   canvas.height = contentImg.height;
    
   // This does all the work!
-  model.stylize(contentImg, styleImg, 0.8).then((imageData) => {
+  model.stylize(contentImg, styleImg).then((imageData) => {
       $('.loading-image').hide();
       document.getElementById("dis-transfer").disabled = false;
       ctx.putImageData(imageData, 0, 0);
